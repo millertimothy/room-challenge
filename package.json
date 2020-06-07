@@ -1,0 +1,25 @@
+{
+  "name": "tauria-room-challenge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev --poll src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/millertimothy/tauria-room-challenge.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/millertimothy/tauria-room-challenge/issues"
+  },
+  "homepage": "https://github.com/millertimothy/tauria-room-challenge#readme",
+  "dependencies": {
+    "@types/express": "^4.17.6",
+    "express": "^4.17.1",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "typescript": "^3.9.5"
+  }
+}

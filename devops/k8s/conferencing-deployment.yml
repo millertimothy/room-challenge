@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conferencing-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conferencing
+  template:
+    metadata:
+      labels:
+        app: conferencing
+    spec:
+      containers:
+        - name: conferencing
+          image: timjmiller/conferencing
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: conferencing-service
+spec:
+  selector:
+    app: conferencing
+  ports:
+    - name: conferencing
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
