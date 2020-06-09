@@ -1,4 +1,5 @@
 import express from 'express';
+import 'express-async-errors';
 import { json } from 'body-parser';
 
 import { changeHostRouter } from './routes/rooms/change-host';
@@ -12,6 +13,7 @@ import { joinLeaveRoomRouter } from './routes/users/join-leave-room';
 import { registerRouter } from './routes/users/register';
 import { signInRouter } from './routes/users/sign-in';
 import { updateUserRouter } from './routes/users/update-user';
+import { errorHandler } from './middleware/error-handler';
 
 const app = express();
 app.use(json());
@@ -27,6 +29,8 @@ app.use(joinLeaveRoomRouter);
 app.use(registerRouter);
 app.use(signInRouter);
 app.use(updateUserRouter);
+
+app.use(errorHandler);
 
 app.listen(3000, () => {
   console.log('Listening on port 3000.');
