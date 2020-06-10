@@ -8,7 +8,7 @@ import { Room } from '../../models/room';
 const router = express.Router();
 
 router.put(
-  '/change-host',
+  '/add-remove-participant',
   [
     body('guid').trim().exists().withMessage('Room guid must be supplied.'),
     body('type').trim().exists().withMessage('Action type must be supplied.'),
@@ -16,14 +16,14 @@ router.put(
   validateRequest,
   authenticateUser,
   async (req: Request, res: Response) => {
-    const { guid } = req.body;
-    const { username: host } = req.user!;
+    const { guid, type } = req.body;
+    const { username } = req.user!;
 
     const room = new Room();
-    const result = await room.updateRoom(guid, { host });
+    const result = await room.addRemoveParticipant(guid, username, type);
 
     res.status(201).send(result);
   },
 );
 
-export { router as changeHostRouter };
+export { router as addRemoveParticipantRouter };

@@ -1,8 +1,9 @@
 FROM node:alpine
 
-WORKDIR /room
+WORKDIR /conf
 COPY package.json . 
 RUN npm i 
 COPY . .
+RUN npm build
 
 CMD ["npm", "start"]

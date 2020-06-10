@@ -7,7 +7,7 @@ export abstract class CustomError extends Error {
     Object.setPrototypeOf(this, CustomError.prototype);
   }
 
-  abstract formatErrors(): {
+  abstract formatError(): {
     message: string;
     invalidParams?: { name: string; reason: string }[];
   };

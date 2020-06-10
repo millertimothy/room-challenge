@@ -7,17 +7,17 @@ import { Room } from '../../models/room';
 const router = express.Router();
 
 router.get(
-  '/room-info',
-  [body('guid').trim().exists().withMessage('Room guid must be supplied.')],
+  '/user-rooms',
+  [body('username').trim().exists().withMessage('Username must be supplied.')],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { guid } = req.body;
+    const { username } = req.body;
 
     const room = new Room();
-    const result = await room.getRoom(guid);
+    const result = await room.getUserRooms(username);
 
     res.status(201).send(result);
   },
 );
 
-export { router as getRoomInfoRouter };
+export { router as getUserRoomsRouter };

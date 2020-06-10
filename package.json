@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --poll src/index.ts"
+    "del-build": "del ./build/*",
+    "start": "ts-node-dev --poll src/index.ts",
+    "build": "npm run del-build && tsc"
   },
   "repository": {
     "type": "git",
@@ -17,11 +19,22 @@
   },
   "homepage": "https://github.com/millertimothy/tauria-room-challenge#readme",
   "dependencies": {
+    "@types/cookie-session": "^2.0.40",
     "@types/express": "^4.17.6",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.7.23",
+    "@types/ramda": "^0.27.6",
+    "arangojs": "^6.14.1",
+    "cookie-session": "^1.4.0",
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-validator": "^6.5.0",
-    "ts-node-dev": "^1.0.0-pre.44",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.18",
+    "ramda": "^0.27.0",
+    "ts-node-dev": "^1.0.0-pre.44"
+  },
+  "devDependencies": {
     "typescript": "^3.9.5"
   }
 }

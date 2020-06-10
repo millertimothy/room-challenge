@@ -1,8 +1,9 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import jwt from 'jsonwebtoken';
 
 import { validateRequest } from '../../middleware/validate-request';
-import { DatabaseConnectionError } from '../../errors/database-connection-error';
+import { User } from '../../models/user';
 
 const router = express.Router();
 
@@ -20,12 +21,16 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    console.log('register user');
-    const { username, password, mobileToken } = req.body;
+    const { username, mobileToken = null } = req.body;
 
-    throw new DatabaseConnectionError();
+    const user = new User();
+    await user.save(req.body);
 
-    res.status(201).send();
+    const token = jwt.sign({ username, mobileToken }, process.env.JWT_SECRET!, {
+      expiresIn: 3600,
+    });
+
+    res.status(201).send(token);
   },
 );
 

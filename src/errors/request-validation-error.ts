@@ -10,7 +10,7 @@ export class RequestValidationError extends CustomError {
     Object.setPrototypeOf(this, RequestValidationError.prototype);
   }
 
-  formatErrors() {
+  formatError() {
     return {
       message: 'Invalid request parameters',
       invalidParams: this.errors.map((err) => ({

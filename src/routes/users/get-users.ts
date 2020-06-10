@@ -1,7 +1,15 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
+
+import { User } from '../../models/user';
 
 const router = express.Router();
 
-router.get('/users', () => {});
+router.get('/users', async (req: Request, res: Response) => {
+
+  const user = new User();
+  const result = await user.getUsers();
+
+  res.status(200).send(result);
+});
 
 export { router as getUsersRouter };
