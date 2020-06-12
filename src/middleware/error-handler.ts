@@ -19,7 +19,6 @@ export const errorHandler = async (
     return res.status(err.statusCode).send({ error: err.formatError() });
   }
 
-  console.log(err);
   res.status(400).send({
     error: {
       message: 'The server encountered an error processing the request.',
