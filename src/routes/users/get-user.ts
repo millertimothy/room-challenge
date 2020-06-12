@@ -9,9 +9,8 @@ router.get(
   '/user/:username',
   validateRequest,
   async (req: Request, res: Response) => {
-
-    const user = new User();
-    const result = await user.getUser(req.params.username);
+    const user = new User(req.params.username);
+    const result = await user.getUser();
 
     res.status(200).send(result);
   },

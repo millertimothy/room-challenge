@@ -10,17 +10,27 @@ const router = express.Router();
 router.put(
   '/add-remove-participant',
   [
-    body('guid').trim().exists().withMessage('Room guid must be supplied.'),
-    body('type').trim().exists().withMessage('Action type must be supplied.'),
+    body('guid')
+      .trim()
+      .exists()
+      .withMessage('Room guid must be supplied.')
+      .isString()
+      .withMessage('Room guid must be a string.'),
+    body('action')
+      .trim()
+      .exists()
+      .withMessage('Action type must be supplied.')
+      .isString()
+      .withMessage('Action type must be a string.'),
   ],
   validateRequest,
   authenticateUser,
   async (req: Request, res: Response) => {
-    const { guid, type } = req.body;
+    const { guid, action } = req.body;
     const { username } = req.user!;
 
     const room = new Room();
-    const result = await room.addRemoveParticipant(guid, username, type);
+    const result = await room.addRemoveParticipant(guid, username, action);
 
     res.status(201).send(result);
   },

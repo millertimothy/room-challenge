@@ -21,8 +21,8 @@ router.put(
   async (req: Request, res: Response) => {
     const { username } = req.user!;
 
-    const user = new User();
-    const result = await user.updateUser({ username, ...req.body });
+    const user = new User(username);
+    const result = await user.updateUser(req.body);
 
     res.status(200).send(result);
   },

@@ -14,3 +14,19 @@ export interface UserOutput {
   username: string;
   mobileToken?: string;
 }
+
+export interface RegisterUserInput {
+  password: string;
+  mobileToken?: string;
+}
+
+export interface UpdateUserInput {
+  password?: string;
+  mobileToken?: string;
+}
+
+export interface UserDocument {
+  _key: string;
+  password: string;
+  mobileToken?: string;
+}

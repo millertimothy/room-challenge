@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: arangodb-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: arangodb
+  template:
+    metadata:
+      labels:
+        app: arangodb
+    spec:
+      containers:
+        - name: arangodb
+          image: arangodb/arangodb:3.6.4
+          env:
+            - name: ARANGO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: ARANGO_PASSWORD
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: arangodb-service
+spec:
+  selector:
+    app: arangodb
+  ports:
+    - name: arangodb
+      protocol: TCP
+      port: 8529
+      targetPort: 8529

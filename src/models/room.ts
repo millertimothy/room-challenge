@@ -1,79 +1,72 @@
-import { pick } from 'ramda';
-
-import { insertOne, getByKey, update, executeAQL } from '../services/arangodb';
+import { insertOne, getByKey, update, executeAQL } from '../utils/arangodb';
 import {
-  RoomInput,
-  RoomDbInput,
   RoomOutput,
-  UpdateRoomInput,
-  Type,
+  RoomDocument,
+  CreateRoomInput,
+  Action,
 } from './room-interfaces';
+import { arangoConfig } from '../config/arangodb';
+import { NotAuthorizedError } from '../errors/not-authorized-error';
+import { BadRequestError } from '../errors/bad-request-error';
+
+const { rooms } = arangoConfig;
 
 export class Room {
-  async save(roomInput: RoomInput): Promise<RoomOutput> {
-    const result = await insertOne('rooms', this.formatDbInput(roomInput));
-    return this.formatDbOutput(result);
+  constructor() {}
+
+  async createRoom(createRoomInput: CreateRoomInput): Promise<RoomOutput> {
+    const result = await insertOne(rooms, {
+      ...createRoomInput,
+      participants: [],
+    });
+    return this.formatDocument(result);
   }
 
-  async changeHost(guid: string, host: string): Promise<RoomOutput> {
-    const result = await update('rooms', guid, { host });
-    return this.formatDbOutput(result);
-  }
-
-  async updateRoom(
-    _key: string,
-    newValue: UpdateRoomInput,
+  async changeHost(
+    guid: string,
+    currentUser: string,
+    newHost: string,
   ): Promise<RoomOutput> {
-    const user = await update('rooms', _key, newValue);
-    return this.formatDbOutput(user);
+    const room = await getByKey(rooms, guid);
+    if (room.host !== currentUser) {
+      throw new NotAuthorizedError();
+    }
+    const result = await update(rooms, guid, { host: newHost });
+    return this.formatDocument(result);
   }
 
-  async getRoom(guid: string): Promise<RoomOutput> {
-    const result = await getByKey('rooms', guid);
-    return this.formatDbOutput(result);
+  async getRoomInfo(guid: string): Promise<RoomOutput> {
+    const result = await getByKey(rooms, guid);
+    return this.formatDocument(result);
   }
 
   async addRemoveParticipant(
-    _key: string,
+    guid: string,
     username: string,
-    type: Type,
+    action: Action,
   ): Promise<RoomOutput> {
-    console.log('types', type, Type.Add);
-    const document =
-      type === Type.Add
+    const room = await getByKey(rooms, guid);
+    if (action === Action.Add && room.participants.length >= room.capacity) {
+      throw new BadRequestError('Room is at maximum capacity.');
+    }
+    const newValue =
+      action === Action.Add
         ? `{ participants: UNION_DISTINCT(r.participants, ["${username}"]) }`
-        : type === Type.Remove
-        ? `{ participants: REMOVE_VALUES(r.participants, ["${username}"]) }`
-        : '{}';
-    const aql =
-      `FOR r IN rooms FILTER r._key == "${_key}" UPDATE r WITH ` +
-      document +
-      ` IN rooms RETURN NEW`;
+        : `{ participants: REMOVE_VALUES(r.participants, ["${username}"]) }`;
+    const aql = `FOR r IN rooms FILTER r._key == "${guid}" 
+      UPDATE r WITH ${newValue} IN rooms RETURN NEW`;
     const result = await executeAQL(aql);
-    return this.formatDbOutput(result[0]);
+    return this.formatDocument(result[0]);
   }
 
-  async getUserRooms(username: string): Promise<Array<RoomOutput>> {
-    const aql = `FOR r IN rooms 
-    FILTER POSITION(r.participants[*], "${username}")
-    RETURN r`;
-    const result = await executeAQL(aql);
-    return result.map(this.formatDbOutput);
-  }
-
-  private formatDbInput(roomInput: RoomInput): RoomDbInput {
-    const { guid: _key, participants = [], ...others } = roomInput;
-    return { ...others, _key, participants };
-  }
-
-  private formatDbOutput(roomDbOutput: any): RoomOutput {
-    const { _key: guid } = roomDbOutput;
-    return pick<
-      RoomOutput,
-      'guid' | 'capacity' | 'name' | 'host' | 'participants'
-    >(['guid', 'capacity', 'name', 'host', 'participants'], {
+  private formatDocument(roomDocument: RoomDocument): RoomOutput {
+    const { _key: guid, name, capacity, host, participants } = roomDocument;
+    return {
       guid,
-      ...roomDbOutput,
-    });
+      name,
+      capacity,
+      host,
+      participants,
+    };
   }
 }

@@ -21,12 +21,12 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { username, mobileToken = null } = req.body;
+    const { username } = req.body;
 
-    const user = new User();
-    await user.save(req.body);
+    const user = new User(username);
+    const result = await user.register(req.body);
 
-    const token = jwt.sign({ username, mobileToken }, process.env.JWT_SECRET!, {
+    const token = jwt.sign(result, process.env.JWT_SECRET!, {
       expiresIn: 3600,
     });
 

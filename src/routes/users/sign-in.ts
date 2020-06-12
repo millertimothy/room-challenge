@@ -17,8 +17,8 @@ router.post(
   async (req: Request, res: Response) => {
     const { username, password } = req.body;
 
-    const user = new User();
-    const result = await user.signIn(username, password);
+    const user = new User(username);
+    const result = await user.signIn(password);
 
     const token = jwt.sign(result, process.env.JWT_SECRET!);
 

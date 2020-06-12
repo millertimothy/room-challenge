@@ -63,3 +63,5 @@ build
 
 # Env vars
 .env
+secrets.yml
+secret.yml

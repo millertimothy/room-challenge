@@ -15,6 +15,22 @@ spec:
       containers:
         - name: conferencing
           image: timjmiller/conferencing
+          env:
+            - name: ARANGO_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: ARANGO_PASSWORD
+            - name: ARANGO_URL
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: ARANGO_URL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: JWT_SECRET
 ---
 apiVersion: v1
 kind: Service

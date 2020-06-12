@@ -25,10 +25,16 @@ export const authenticateUser = (
   if (token == null) {
     throw new NotAuthorizedError();
   }
-
-  const userPayload = jwt.verify(token, process.env.JWT_SECRET!) as UserPayload;
-
-  req.user = userPayload;
   
+  try {
+    const userPayload = jwt.verify(
+      token,
+      process.env.JWT_SECRET!,
+    ) as UserPayload;
+    req.user = userPayload;
+  } catch (err) {
+    throw new NotAuthorizedError();
+  }
+
   next();
 };

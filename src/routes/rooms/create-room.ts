@@ -16,8 +16,8 @@ router.post(
       .withMessage('Room name must be between 3 and 20 characters.'),
     body('capacity')
       .optional()
-      .isNumeric()
-      .withMessage('Capacity must be a number.'),
+      .matches(/^[1-9]\d*$/g)
+      .withMessage('Capacity must be a positive integer'),
   ],
   validateRequest,
   authenticateUser,
@@ -26,7 +26,7 @@ router.post(
     const { username: host } = req.user!;
 
     const room = new Room();
-    const result = await room.save({ name, capacity, host });
+    const result = await room.createRoom({ name, capacity, host });
 
     res.status(201).send(result);
   },

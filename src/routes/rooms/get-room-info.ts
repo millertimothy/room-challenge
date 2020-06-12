@@ -14,7 +14,7 @@ router.get(
     const { guid } = req.body;
 
     const room = new Room();
-    const result = await room.getRoom(guid);
+    const result = await room.getRoomInfo(guid);
 
     res.status(201).send(result);
   },

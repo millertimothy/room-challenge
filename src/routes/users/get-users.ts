@@ -1,13 +1,12 @@
 import express, { Request, Response } from 'express';
 
-import { User } from '../../models/user';
+import { Users } from '../../models/users';
 
 const router = express.Router();
 
 router.get('/users', async (req: Request, res: Response) => {
-
-  const user = new User();
-  const result = await user.getUsers();
+  const users = new Users();
+  const result = await users.getUsers();
 
   res.status(200).send(result);
 });

@@ -1,18 +1,22 @@
 import { Database } from 'arangojs';
 import { ConflictingKeyError } from '../errors/conflicting-key';
 import { DocumentNotFoundError } from '../errors/document-not-found';
+import { arangoConfig } from '../config/arangodb';
 
-const db = new Database('http://localhost:8529');
-db.useBasicAuth('root', 'openSesame');
+const { url, username, password, users, rooms, dbName } = arangoConfig;
+
+let db: Database;
 
 export const setupArango = async () => {
+  db = new Database(url);
+  db.useBasicAuth(username, password);
   const dbs = await db.listDatabases();
-  if (!dbs.includes('conferencing')) {
-    await db.createDatabase('conferencing');
+  if (!dbs.includes(dbName)) {
+    await db.createDatabase(dbName);
   }
-  db.useDatabase('conferencing');
+  db.useDatabase(dbName);
 
-  const verticeNames = ['users', 'rooms'];
+  const verticeNames = [users, rooms];
   const collections = await db.listCollections();
   const collectionNames = collections.map((collection: any) => collection.name);
   const promises = verticeNames.map(async (verticeName) => {
@@ -22,10 +26,6 @@ export const setupArango = async () => {
     }
   });
   await Promise.all(promises);
-};
-
-export const listCollections = async () => {
-  return await db.listCollections();
 };
 
 export const insertOne = async (collectionName: string, body: any) => {
@@ -46,8 +46,11 @@ export const insertOne = async (collectionName: string, body: any) => {
 
 export const getByKey = async (collectionName: string, _key: string) => {
   const collection = db.collection(collectionName);
-  const rst: any[] = await collection.lookupByKeys([_key]);
-  return rst[0];
+  const result: any[] = await collection.lookupByKeys([_key]);
+  if (!result[0]) {
+    throw new DocumentNotFoundError();
+  }
+  return result[0];
 };
 
 export const getAll = async (collectionName: string) => {

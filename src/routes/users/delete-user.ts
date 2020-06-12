@@ -11,8 +11,8 @@ router.delete(
   async (req: Request, res: Response) => {
     const { username } = req.user!;
 
-    const user = new User();
-    const result = await user.deleteUser(username);
+    const user = new User(username);
+    const result = await user.deleteUser();
 
     res.status(200).send(result);
   },
