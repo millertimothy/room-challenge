@@ -13,6 +13,7 @@ router.post(
   [
     body('name')
       .isLength({ min: 3, max: 20 })
+      .isString()
       .withMessage('Room name must be between 3 and 20 characters.'),
     body('capacity')
       .optional()

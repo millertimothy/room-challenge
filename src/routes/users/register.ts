@@ -12,12 +12,17 @@ router.post(
   [
     body('username')
       .isLength({ min: 3, max: 20 })
+      .isString()
       .withMessage('Username must be between 3 and 20 characters.'),
     body('password')
       .trim()
+      .isString()
       .isLength({ min: 6, max: 20 })
       .withMessage('Password must be between 6 and 20 characters.'),
-    body('mobileToken').optional(),
+    body('mobileToken')
+      .optional()
+      .isString()
+      .withMessage('Mobile token must be a string.'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

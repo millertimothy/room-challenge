@@ -12,9 +12,10 @@ router.put(
   [
     body('password')
       .optional()
+      .isString()
       .isLength({ min: 6, max: 20 })
       .withMessage('Password must be between 6 and 20 characters.'),
-    body('mobileToken').optional(),
+    body('mobileToken').optional().isString(),
   ],
   authenticateUser,
   validateRequest,

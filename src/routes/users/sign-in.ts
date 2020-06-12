@@ -10,8 +10,15 @@ const router = express.Router();
 router.post(
   '/sign-in',
   [
-    body('username').notEmpty().withMessage('Please supply a username.'),
-    body('password').trim().notEmpty().withMessage('Please supply a password.'),
+    body('username')
+      .isLength({ min: 3, max: 20 })
+      .isString()
+      .withMessage('Username must be between 3 and 20 characters.'),
+    body('password')
+      .trim()
+      .isString()
+      .isLength({ min: 6, max: 20 })
+      .withMessage('Password must be between 6 and 20 characters.'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {

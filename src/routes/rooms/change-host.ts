@@ -11,11 +11,11 @@ const router = express.Router();
 router.put(
   '/change-host',
   [
-    body('guid').trim().exists().withMessage('Room guid must be supplied.'),
+    body('guid').trim().isString().withMessage('Room guid must be a string.'),
     body('newHost')
       .trim()
-      .exists()
-      .withMessage('New host user must be supplied.'),
+      .isString()
+      .withMessage('New host username must be a string.'),
   ],
   validateRequest,
   authenticateUser,
