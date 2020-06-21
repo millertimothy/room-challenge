@@ -7,6 +7,8 @@ const { url, username, password, users, rooms, dbName } = arangoConfig;
 
 let db: Database;
 
+// If a call to the database is made and the connection has been lost, 
+// setupArango will be called again and the db Object (containing the connection) will be over written. 
 export const setupArango = async () => {
   db = new Database(url);
   db.useBasicAuth(username, password);

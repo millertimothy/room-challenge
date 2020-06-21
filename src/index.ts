@@ -1,5 +1,5 @@
 import express from 'express';
-import 'express-async-errors';
+import 'express-async-errors'; // To make async await calls in the handleError middleware. 
 import { json } from 'body-parser';
 
 import { addRemoveParticipantRouter } from './routes/rooms/add-remove-participant';
@@ -33,6 +33,7 @@ app.use(updateUserRouter);
 
 app.use(errorHandler);
 
+// startup -> arango -> index -> routes -> 
 const startup = async () => {
   await setupArango();
 

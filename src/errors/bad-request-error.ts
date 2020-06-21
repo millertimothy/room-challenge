@@ -1,5 +1,8 @@
+// Paid some attention to proving useful error to the client. 
 import { CustomError } from './custom-error';
 
+// Username or password is invalid.
+// Room is at maximum capacity.
 export class BadRequestError extends CustomError {
   statusCode = 400;
 
