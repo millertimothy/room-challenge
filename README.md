@@ -45,7 +45,7 @@ http://server.room-challenge.xyz
 http://arangodb.room-challenge.xyz
 ```
 
-The ArangoDB Web Interface username is root and the password has been included in my LinkedIn message to Jesse.
+\* Please note that the endpoints are no longer available. 
 
 ## Methods
 
