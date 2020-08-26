@@ -1,6 +1,6 @@
-# Tauria Room Challenge
+# Room Challenge
 
-Thanks for taking the time to go over my soluction to the room challenge. This project was built using Express, TypeScript and [ArangoDB](https://www.arangodb.com/).
+Thanks for taking the time to go over my solution to the room challenge. This project was built using Express, TypeScript and [ArangoDB](https://www.arangodb.com/).
 
 ## Run locally
 
@@ -45,7 +45,7 @@ http://server.room-challenge.xyz
 http://arangodb.room-challenge.xyz
 ```
 
-The ArangoDB Web Interface username is root and the password has been included in my LinkedIn message to Jesse.
+\* Please note that the endpoints are no longer available. 
 
 ## Methods
 
