@@ -12,8 +12,3 @@ export abstract class CustomError extends Error {
     invalidParams?: { name: string; reason: string }[];
   };
 }
-
-/* 
-Like an interface but allows unimplemented methods. These methods are called abstract methods. 
-We can't create an instance of an abstract class.
-*/

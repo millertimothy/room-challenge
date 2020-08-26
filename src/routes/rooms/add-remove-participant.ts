@@ -1,5 +1,3 @@
-// Route follows a basic pattern. optional middleware, creating an instance of a class, 
-// calling a method of that class and sending the result to the client with an appropriate status code. 
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 
@@ -37,5 +35,5 @@ router.put(
     res.status(201).send(result);
   },
 );
-// exporting with a custom name so that the app can distinguish them all. 
+
 export { router as addRemoveParticipantRouter };
